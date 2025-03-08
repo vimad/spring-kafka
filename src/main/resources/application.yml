@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: spring-kafka
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        delivery.timeout.ms: 120000
+        linger.ms: 0
+        request.timeout.ms: 30000
+#      retries: 10
+#      properties:
+#        retry:
+#          backoff:
+#            ms: 1000
