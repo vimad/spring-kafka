@@ -3,10 +3,12 @@ package com.example.spring_kafka.service;
 import com.example.spring_kafka.model.Product;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +31,13 @@ public class ProductService {
 
     @SneakyThrows
     private void sendSynchronously(Product product, String productId) {
-        SendResult<String, Product> result = kafkaTemplate.send("product-created-topic", productId, product).get();
+//        SendResult<String, Product> result = kafkaTemplate.send("product-created-topic", productId, product).get();
+
+        ProducerRecord<String, Product> record = new ProducerRecord<>("product-created-topic", productId, product);
+//        record.headers().add("messageId", UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8));
+        record.headers().add("messageId", "123".getBytes(StandardCharsets.UTF_8));
+        SendResult<String, Product> result = kafkaTemplate.send(record).get();
+
         log.info("Partition - {}", result.getRecordMetadata().partition());
         log.info("Topic - {}", result.getRecordMetadata().topic());
         log.info("Offset - {}", result.getRecordMetadata().offset());

@@ -26,3 +26,6 @@ spring:
 #        retry:
 #          backoff:
 #            ms: 1000
+
+    consumer:
+      bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
